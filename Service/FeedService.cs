@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using ExportBlog.Package;
 
 namespace ExportBlog
 {
@@ -71,8 +73,10 @@ namespace ExportBlog
                     _list = service.GetList();
                 }
             }
-            return _list;
+            Console.WriteLine("-------------------------------count:"+_list.Count);
+            return new SortUtil<FeedEntity>(_list, "Title").Sort();
         }
+        
         public bool GetContent(ref FeedEntity entity)
         {
             if (entity.Content != string.Empty) return true;
@@ -99,4 +103,5 @@ namespace ExportBlog
             return entity;
         }
     }
+    
 }

@@ -69,6 +69,7 @@
     <Compile Include="FolderDialog.cs" />
     <Compile Include="Package\ChmPackage.cs" />
     <Compile Include="Package\EpubPackage.cs" />
+    <Compile Include="Package\SortUtil.cs" />
     <Compile Include="Package\TxtPackage.cs" />
     <Compile Include="Service\B163Service.cs" />
     <Compile Include="Service\CnBlogsService.cs" />
