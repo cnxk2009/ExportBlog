@@ -105,5 +105,10 @@ namespace ExportBlog
             SendMessage(this.Handle, WM_SYSCOMMAND, SC_MOVE + HTCAPTION, 0);
         }
         #endregion
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

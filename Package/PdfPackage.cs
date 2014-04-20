@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
+
 //http://www.cnblogs.com/CareySon/archive/2011/11/07/2239017.html
 
 namespace ExportBlog
@@ -45,13 +46,14 @@ namespace ExportBlog
                 items = feedService.GetList();
                 _callback("共获取到【" + items.Count + "】篇文章");
             }
-            baseFT = CreateChineseFont();
-            codeFT = FontFactory.GetFont("Courier", 10, BaseColor.DARK_GRAY);
+            baseFT = CreateChineseFont(getSimheiTTF());
+            //codeFT = FontFactory.GetFont("Courier", 10, BaseColor.DARK_GRAY);
+            codeFT = CreateChineseFont(getMsyhTTF());
         }
 
         BaseFont baseFT = null;
-        Font codeFT = null;
-
+        //Font codeFT = null;
+        BaseFont codeFT = null;
         public void Build()
         {
             if (artUrls != null)
@@ -95,7 +97,7 @@ namespace ExportBlog
             document.Open();
             document.AddTitle(_title);
 
-            BaseFont baseFT = CreateChineseFont();
+            BaseFont baseFT = CreateChineseFont(getSimheiTTF());
 
             foreach (string url in artUrls)
             {
@@ -116,18 +118,20 @@ namespace ExportBlog
         {
             Font ft = new Font(baseFT, 12);
 
-            Chapter chp = new Chapter(new Paragraph(entity.Title, new Font(baseFT, 18)) { Alignment = Element.ALIGN_CENTER }, chp_idx++);
+            Chapter chp = new Chapter(new Paragraph(entity.Title, new Font(baseFT, 12)) { Alignment = Element.ALIGN_CENTER }, chp_idx++);
             chp.Add(new Paragraph(" "));
             chp.Add(new Paragraph(" "));
 
             string text = GetContent(entity);
+            int rownum = 1;
             foreach (string line in text.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries))
             {
                 try
                 {
                     if (line == "[code_begin]")
                     {
-                        ft = codeFT;
+                        //ft = codeFT;
+                        ft = new Font(codeFT, 11);
                     }
                     else if (line == "[code_end]")
                     {
@@ -143,10 +147,24 @@ namespace ExportBlog
                             chp.Add(img);
                         }
                     }
+                    else if (line.Replace("\t","").StartsWith("//"))
+                    {
+                        iTextSharp.text.Font font = new iTextSharp.text.Font(codeFT,11, Font.NORMAL, BaseColor.BLUE);
+                        String line_ = line.Replace("\t", "    ");
+                        chp.Add(new Paragraph(line_, font));
+                    }
+                    else if (line.Replace("\t", "").StartsWith("/*") || line.Replace("\t", "").StartsWith("*") || line.Replace("\t", "").StartsWith("*/"))
+                    {
+                        iTextSharp.text.Font font = new iTextSharp.text.Font(codeFT, 11, Font.NORMAL, BaseColor.GREEN);
+                        String line_ = line.Replace("\t", "    ");
+                        chp.Add(new Paragraph(line_, font));
+                    }
                     else
                     {
-                        chp.Add(new Paragraph(line, ft));
+                        String line_ = line.Replace("\t", "    ");
+                        chp.Add(new Paragraph(line_, ft));
                     }
+                    
                 }
                 catch { }
             }
@@ -176,16 +194,24 @@ namespace ExportBlog
 
             return html;
         }
-        private BaseFont CreateChineseFont()
+        private BaseFont CreateChineseFont(String ttf)
         {
             BaseFont.AddToResourceSearch("iTextAsian.dll");
             BaseFont.AddToResourceSearch("iTextAsianCmaps.dll"); //"STSong-Light", "UniGB-UCS2-H", 
-            BaseFont baseFT = BaseFont.CreateFont("STSong-Light", "UniGB-UCS2-H", BaseFont.EMBEDDED);
-
+            BaseFont baseFT = BaseFont.CreateFont(ttf, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             return baseFT;
         }
+        
+        private String getSimheiTTF(){
+            return System.IO.Path.GetDirectoryName(Environment.GetFolderPath(Environment.SpecialFolder.System))+ "/Fonts/simhei.ttf";
+        }
+        private String getMsyhTTF(){
+            return System.IO.Path.GetDirectoryName(Environment.GetFolderPath(Environment.SpecialFolder.System))+ "/Fonts/msyh.ttf";
+        }
+
         #endregion
 
     }
+    
     
 }

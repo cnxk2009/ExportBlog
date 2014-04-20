@@ -16,7 +16,7 @@ namespace ExportBlog
 
         Uri uri;
         Encoding encoding = Encoding.UTF8;
-        int timeOut = 3000;
+        int timeOut = 7000;
         CookieContainer cc = new CookieContainer();
         string referer;
         string contentType = "application/x-www-form-urlencoded";

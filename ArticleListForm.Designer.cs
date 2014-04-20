@@ -85,11 +85,12 @@
             this.label1.Size = new System.Drawing.Size(244, 107);
             this.label1.TabIndex = 4;
             this.label1.Text = "正在加载文章列表......";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
             this.label2.BackColor = System.Drawing.SystemColors.InactiveBorder;
-            this.label2.Font = new System.Drawing.Font("Microsoft YaHei", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label2.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label2.Location = new System.Drawing.Point(12, 28);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(525, 29);
